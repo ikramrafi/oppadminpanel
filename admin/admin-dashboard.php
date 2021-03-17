@@ -10,7 +10,7 @@
     		<div class="card-deck mt-3 text-light text-center font-weight-bold">
 
     			<div class="card bg-primary">
-    				<div class="card-header">Total Users</div>
+    				<div class="card-header">Total Users +</div>
     				<div class="card-body">
     					<h1 class="display-4">
     						<?= $count->totalCount('users'); ?>
