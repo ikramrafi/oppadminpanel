@@ -90,13 +90,12 @@
 
 
 //Handle Forgot Password Ajax Request
- if (isset($_POST['action']) && $_POST['action'] == 'forgot'){
- 	$email = $user->test_input($_POST['email']);
+if (isset($_POST['action']) && $_POST['action'] == 'forgot'){
+  $email = $user->test_input($_POST['email']);
 
  	$user_found = $user->currentUser($email);
-
- 	if ($user_found != null) {
- 		$token = uniqid();  //uniqid will generate some unique alpha numeric characters
+  if ($user_found != null) {
+    $token = uniqid();  //uniqid will generate some unique alpha numeric characters
  		$token = str_shuffle($token); //when page refresh str_shuffle function will shuffle all unique ids
 
  		$user->forgot_password($token,$email);
@@ -104,39 +103,45 @@
  		//php mailer libaray to send email
  		try {
             
-            $mail->SMTPDebug = SMTP::DEBUG_SERVER; 
-            // $mail->isSMTP();          
-            $mail->SMTPDebug = 2;
-            $mail->Host       = "smtp.gmail.com";  
-            $mail->SMTPAuth   = true;  
-            $mail->Username   = DATABASE::USERNAME; 
-            $mail->Password   = DATABASE::PASSWORD;   
-            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS; 
-            $mail->Port       = 587; 
+      $mail->SMTPDebug = SMTP::DEBUG_SERVER; 
+      // $mail->isSMTP();          
+      $mail->SMTPDebug = 2;
+      $mail->Host       = "smtp.gmail.com";  
+      $mail->SMTPAuth   = true;  
+      $mail->Username   = DATABASE::USERNAME; 
+      $mail->Password   = DATABASE::PASSWORD;   
+      $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS; 
+      $mail->Port       = 587; 
 
-            //Recipients
-            $mail->setFrom(Database::USERNAME,'MUHAMMAD IKRAM RAFI');
-            $mail->addAddress($email);     //Add a recipient
+      //Recipients
+      $mail->setFrom(Database::USERNAME,'MUHAMMAD IKRAM RAFI');
+      $mail->addAddress($email);     //Add a recipient
     
-            //Content
-            $mail->isHTML(true);  
-            $mail->Subject = 'Reset Password';
-            $mail->Body    = '<h3>Click the below link to reset your password.<br> <a href="http://localhost/user_system/reset-pass.php?email='.$email.'&token='.$token.'">http://localhost/user_system/reset-pass.php?email='.$email.'&token='.$token.'</a><br>Regards<br>Muhammad Ikram Rafi</h3>';
-            $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
+      //Content
+      $mail->isHTML(true);  
+      $mail->Subject = 'Reset Password';
+      $mail->Body    = '<h3>Click the below link to reset your password.<br> <a href="http://localhost/user_system/reset-pass.php?email='.$email.'&token='.$token.'">http://localhost/user_system/reset-pass.php?email='.$email.'&token='.$token.'</a><br>Regards<br>Muhammad Ikram Rafi</h3>';
+      $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
 
-            $mail->send();
-            echo $user->showMessage('success','We have send you the reset link in your email ID, Please check your E-mail!');
-        }
-        catch (Exception $e) {
-        	echo $user->showMessage('danger','Something went wrong please try again later!'); 
-        }
+      $mail->send();
+      echo $user->showMessage('success','We have send you the reset link in your email ID, Please check your E-mail!');
     }
-    else{
-        echo $user->showMessage('info','This email is not registered!');
+    catch (Exception $e) {
+      echo $user->showMessage('danger','Something went wrong please try again later!'); 
     }
+  }
+  else{
+    echo $user->showMessage('info','This email is not registered!');
+  }
+}
 
- 	
- }
+// Checking users Logged in or not
+if (isset($_POST['action']) && $_POST['action'] == 'checkUser') {
+  if (!$user->currentUser($_SESSION['user'])) {
+    echo 'bye';
+    unset($_SESSION['user']);
+  }
+}
 
 
 

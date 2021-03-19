@@ -7,6 +7,4 @@ header('location:../../index.php')
 
 
 
-
-
 ?>
